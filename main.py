@@ -1,12 +1,12 @@
 import os
+from operator import itemgetter
 from time import sleep
 
 from picamera import PiCamera
 from PIL import Image
 
 from model import TFLiteModel
-
-IMAGE_PATH = './temp.jpg'
+from settings import IMAGE_PATH, LABELS
 
 
 def capture():
@@ -18,22 +18,31 @@ def capture():
 
 
 def predict():
-    model_dir = os.getcwd()
+    if not os.path.isfile(IMAGE_PATH):
+        raise ValueError('Path is not a file')
 
-    if os.path.isfile(IMAGE_PATH):
-        image = Image.open(IMAGE_PATH)
-        model = TFLiteModel(model_dir)
-        model.load()
-        outputs = model.predict(image)
-        print(f"Predicted: {outputs}")
-    else:
-        print(f"Couldn't find image file {args.image}")
+    image = Image.open(IMAGE_PATH)
+    model = TFLiteModel(os.getcwd())
+    model.load()
+
+    return model.predict(image)
 
 
 def main():
     capture()
-    predict()
-    
-    
+
+    try:
+        outputs = predict()
+    except ValueError:
+        print(f'Couldn\'t find image file')
+        return
+
+    predictions = outputs['predictions']
+    max_label = max(predictions, key=itemgetter('confidence'))['label']
+    label = LABELS[max_label]
+
+    print(f'Predicted: {label}')
+
+
 if __name__ == '__main__':
     main()
