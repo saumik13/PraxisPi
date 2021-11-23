@@ -1,0 +1,11 @@
+cardboard
+glass
+keyboard
+laptop
+metal
+mobile
+monitor
+mouse
+paper
+plastic
+trash
