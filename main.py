@@ -27,6 +27,43 @@ def predict():
 
     return model.predict(image)
 
+def set_GPIO(): 
+    GPI.setmode(GPIO.BOARD)
+    GPIO.setwarnings(False)
+    # Using same pins as outlined on Haris' tutorial 
+def LED(waste_material): 
+    set_GPIO()
+    if waste_material == "plastic": 
+        GPIO.setup(18, GPIO.OUT)
+        GPIO.output(18, GPIO.HIGH)
+        time.sleep(3)
+        GPIO.output(18, GPIO.LOW)
+    elif waste_material == "e-waste":
+        GPIO.setup(17, GPIO.OUT)
+        GPIO.output(17, GPIO.HIGH)
+        time.sleep(3)
+        GPIO.output(17, GPIO.LOW)
+    elif waste_material == "glass":
+        GPIO.setup(22, GPIO.OUT)
+        GPIO.output(22, GPIO.HIGH)
+        time.sleep(3)
+        GPIO.output(22, GPIO.LOW)
+    elif waste_material == "cardboard":
+        GPIO.setup(27, GPIO.OUT)
+        GPIO.output(27, GPIO.HIGH)
+        time.sleep(3)
+        GPIO.output(27, GPIO.LOW)
+    elif waste_material == "trash":
+        GPIO.setup(5, GPIO.OUT)
+        GPIO.output(5, GPIO.HIGH)
+        time.sleep(3)
+        GPIO.output(5, GPIO.LOW)
+    elif waste_material == "paper":
+        GPIO.setup(6, GPIO.OUT)
+        GPIO.output(6, GPIO.HIGH)
+        time.sleep(3)
+        GPIO.output(6, GPIO.LOW)
+
 
 def main():
     capture()
@@ -38,11 +75,11 @@ def main():
         return
 
     predictions = outputs['predictions']
-    max_label = max(predictions, key=itemgetter('confidence'))['label']
-    label = LABELS[max_label]
+    max_low_label = max(predictions, key=itemgetter('confidence'))['label']
+    high_label = LABELS[max_low_label]
 
-    print(f'Predicted: {label}')
-
+    print(f'Predicted: {high_label}')
+    LED(high_label)
 
 if __name__ == '__main__':
     main()
