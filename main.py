@@ -32,6 +32,7 @@ def set_GPIO():
     GPIO.setwarnings(False)
     # Using same pins as outlined on Haris' tutorial 
     # LED turning off after 3 seconds
+
 def LED(waste_material): 
     set_GPIO()
     if waste_material == "plastic": 
