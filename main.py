@@ -28,7 +28,7 @@ def predict():
     return model.predict(image)
 
 def set_GPIO(): 
-    GPIO.setmode(GPIO.BOARD)
+    GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
     # Using same pins as outlined on Haris' tutorial 
     # LED turning off after 3 seconds
