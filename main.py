@@ -4,10 +4,10 @@ from time import sleep
 
 from picamera import PiCamera
 from PIL import Image
+import RPi.GPIO as GPIO
 
 from model import TFLiteModel
 from settings import IMAGE_PATH, LABELS
-import RPi.GPIO as GPIO
 
 def capture():
     camera = PiCamera()
