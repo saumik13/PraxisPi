@@ -7,7 +7,7 @@ from PIL import Image
 import RPi.GPIO as GPIO
 
 from model import TFLiteModel
-from settings import IMAGE_PATH, LABELS
+from settings import IMAGE_PATH, LABELS, LED_ACTIVATION_TIME, PINS
 
 
 def capture():
@@ -34,43 +34,16 @@ def set_GPIO():
     # Using same pins as outlined on Haris' tutorial 
     # LED turning off after 3 seconds
 
-def LED(waste_material): 
+
+def LED(high_label):
     set_GPIO()
-    if waste_material == "plastic": 
-        GPIO.setup(18, GPIO.OUT)
-        GPIO.output(18, GPIO.HIGH)
-        sleep(3)
-        GPIO.output(18, GPIO.LOW)
-    elif waste_material == "e-waste":
-        GPIO.setup(17, GPIO.OUT)
-        GPIO.output(17, GPIO.HIGH)
-        sleep(3)
-        GPIO.output(17, GPIO.LOW)
-    elif waste_material == "glass":
-        GPIO.setup(22, GPIO.OUT)
-        GPIO.output(22, GPIO.HIGH)
-        sleep(3)
-        GPIO.output(22, GPIO.LOW)
-    elif waste_material == "cardboard":
-        GPIO.setup(27, GPIO.OUT)
-        GPIO.output(27, GPIO.HIGH)
-        sleep(3)
-        GPIO.output(27, GPIO.LOW)
-    elif waste_material == "trash":
-        GPIO.setup(5, GPIO.OUT)
-        GPIO.output(5, GPIO.HIGH)
-        sleep(3)
-        GPIO.output(5, GPIO.LOW)
-    elif waste_material == "paper":
-        GPIO.setup(6, GPIO.OUT)
-        GPIO.output(6, GPIO.HIGH)
-        sleep(3)
-        GPIO.output(6, GPIO.LOW)
-    elif waste_material == "metal":
-        GPIO.setup(16, GPIO.OUT)
-        GPIO.output(16, GPIO.HIGH)
-        sleep(3)
-        GPIO.output(16, GPIO.LOW)
+
+    pin = PINS[high_label]
+
+    GPIO.setup(pin, GPIO.OUT)
+    GPIO.output(pin, GPIO.HIGH)
+    sleep(LED_ACTIVATION_TIME)
+    GPIO.output(pin, GPIO.LOW)
 
 
 def main():
