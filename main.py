@@ -4,7 +4,7 @@ from time import sleep
 
 from picamera import PiCamera
 from PIL import Image
-import RPi.GPIO as GPIO
+from RPi.GPIO import GPIO
 
 from model import TFLiteModel
 from settings import IMAGE_PATH, LABELS, LED_ACTIVATION_TIME, PINS
