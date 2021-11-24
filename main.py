@@ -9,6 +9,7 @@ import RPi.GPIO as GPIO
 from model import TFLiteModel
 from settings import IMAGE_PATH, LABELS
 
+
 def capture():
     camera = PiCamera()
     camera.start_preview()
