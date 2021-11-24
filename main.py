@@ -7,7 +7,7 @@ from PIL import Image
 
 from model import TFLiteModel
 from settings import IMAGE_PATH, LABELS
-
+import RPi.GPIO as GPIO
 
 def capture():
     camera = PiCamera()
@@ -28,7 +28,7 @@ def predict():
     return model.predict(image)
 
 def set_GPIO(): 
-    GPI.setmode(GPIO.BOARD)
+    GPIO.setmode(GPIO.BOARD)
     GPIO.setwarnings(False)
     # Using same pins as outlined on Haris' tutorial 
     # LED turning off after 3 seconds
