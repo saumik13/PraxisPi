@@ -66,7 +66,7 @@ def main():
 
             print(f'Predicted: {high_label}')
             LED(PINS[high_label])
-            time.sleep(2)
+            sleep(2)
 
 
 if __name__ == '__main__':
