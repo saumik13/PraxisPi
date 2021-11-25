@@ -10,8 +10,17 @@ from model import TFLiteModel
 from settings import IMAGE_PATH, LABELS, LED_ACTIVATION_TIME, PINS, BUTTON_PIN
 
 
-def capture():
-    camera = PiCamera()
+def setup():
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setwarnings(False)
+
+    GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+    for pin in PINS.values():
+        GPIO.setup(pin, GPIO.OUT)
+
+
+def capture(camera):
     camera.start_preview()
     sleep(5)
     camera.capture(IMAGE_PATH)
@@ -29,17 +38,7 @@ def predict():
     return model.predict(image)
 
 
-def setup():
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setwarnings(False)
-
-    GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-
-    for pin in PINS.values():
-        GPIO.setup(pin, GPIO.OUT)
-
-
-def LED(pin):
+def light_on(pin):
     GPIO.output(pin, GPIO.HIGH)
     sleep(LED_ACTIVATION_TIME)
     GPIO.output(pin, GPIO.LOW)
@@ -47,12 +46,13 @@ def LED(pin):
 
 def main():
     setup()
+    camera = PiCamera()
 
     while True:
         input_state = GPIO.input(BUTTON_PIN)
 
         if not input_state:
-            capture()
+            capture(camera)
 
             try:
                 outputs = predict()
@@ -65,7 +65,7 @@ def main():
             high_label = LABELS[max_low_label]
 
             print(f'Predicted: {high_label}')
-            LED(PINS[high_label])
+            light_on(PINS[high_label])
             sleep(2)
 
 
