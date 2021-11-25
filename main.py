@@ -45,22 +45,33 @@ def LED(high_label):
     sleep(LED_ACTIVATION_TIME)
     GPIO.output(pin, GPIO.LOW)
 
+def set_button(PIN): 
+    GPIO.setup(PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+
+
 
 def main():
-    capture()
 
-    try:
-        outputs = predict()
-    except ValueError:
-        print(f'Couldn\'t find image file')
-        return
+    set_button(PIN_NUMBER)
+    while True:
+        input_state = GPIO.input(PIN_NUMBER)
+        if input_state == False:
+            capture()
+            
+            try:
+                outputs = predict()
+            except ValueError:
+                print(f'Couldn\'t find image file')
+                return
 
-    predictions = outputs['predictions']
-    max_low_label = max(predictions, key=itemgetter('confidence'))['label']
-    high_label = LABELS[max_low_label]
+            predictions = outputs['predictions']
+            max_low_label = max(predictions, key=itemgetter('confidence'))['label']
+            high_label = LABELS[max_low_label]
 
-    print(f'Predicted: {high_label}')
-    LED(high_label)
+            print(f'Predicted: {high_label}')
+            LED(high_label)
+            time.sleep(2)
 
 if __name__ == '__main__':
     main()
