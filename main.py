@@ -7,7 +7,7 @@ from PIL import Image
 from RPi import GPIO
 
 from model import TFLiteModel
-from settings import IMAGE_PATH, LABELS, LED_ACTIVATION_TIME, PINS
+from settings import IMAGE_PATH, LABELS, LED_ACTIVATION_TIME, PINS, BUTTON_PIN
 
 
 def capture():
@@ -28,37 +28,32 @@ def predict():
 
     return model.predict(image)
 
-def set_GPIO(): 
+
+def setup():
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
-    # Using same pins as outlined on Haris' tutorial 
-    # LED turning off after 3 seconds
+
+    GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+    for pin in PINS.values():
+        GPIO.setup(pin, GPIO.OUT)
 
 
-def LED(high_label):
-    set_GPIO()
-
-    pin = PINS[high_label]
-
-    GPIO.setup(pin, GPIO.OUT)
+def LED(pin):
     GPIO.output(pin, GPIO.HIGH)
     sleep(LED_ACTIVATION_TIME)
     GPIO.output(pin, GPIO.LOW)
 
-def set_button(PIN): 
-    GPIO.setup(PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-
-
-
 
 def main():
+    setup()
 
-    set_button(PIN_NUMBER)
     while True:
-        input_state = GPIO.input(PIN_NUMBER)
-        if input_state == False:
+        input_state = GPIO.input(BUTTON_PIN)
+
+        if not input_state:
             capture()
-            
+
             try:
                 outputs = predict()
             except ValueError:
@@ -70,8 +65,9 @@ def main():
             high_label = LABELS[max_low_label]
 
             print(f'Predicted: {high_label}')
-            LED(high_label)
+            LED(PINS[high_label])
             time.sleep(2)
+
 
 if __name__ == '__main__':
     main()

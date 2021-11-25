@@ -37,4 +37,6 @@ PINS = {
     TRASH: 5,
 }
 
+BUTTON_PIN = 24
+
 LED_ACTIVATION_TIME = 10
