@@ -16,16 +16,11 @@ class WasteModel:
             model_dir, self.signature.get('filename'),
         )
 
-        if not os.path.isfile(self.model_file):
-            raise FileNotFoundError(f'Model file does not exist')
-
-        self.signature_inputs = self.signature.get('inputs')
-        self.signature_outputs = self.signature.get('outputs')
-
-        version = self.signature.get('export_model_version')
-
         self.interpreter = tflite.Interpreter(model_path=self.model_file)
         self.interpreter.allocate_tensors()
+
+        signature_inputs = self.signature.get('inputs')
+        signature_outputs = self.signature.get('outputs')
 
         input_details = {
             detail.get('name'): detail
@@ -33,7 +28,7 @@ class WasteModel:
         }
         self.model_inputs = {
             key: {**sig, **input_details.get(sig.get('name'))}
-            for key, sig in self.signature_inputs.items()
+            for key, sig in signature_inputs.items()
         }
         output_details = {
             detail.get('name'): detail
@@ -41,7 +36,7 @@ class WasteModel:
         }
         self.model_outputs = {
             key: {**sig, **output_details.get(sig.get('name'))}
-            for key, sig in self.signature_outputs.items()
+            for key, sig in signature_outputs.items()
         }
 
     def predict(self, image):
