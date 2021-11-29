@@ -31,13 +31,11 @@ def capture(camera):
     camera.stop_preview()
 
 
-def predict():
+def predict(model):
     if not os.path.isfile(IMAGE_PATH):
         raise ValueError('Path is not a file')
 
     image = Image.open(IMAGE_PATH)
-    model = WasteModel()
-    model.load()
 
     return model.predict(image)
 
@@ -51,6 +49,7 @@ def light_on(pin):
 def main():
     setup()
     camera = PiCamera()
+    model = WasteModel()
 
     while True:
         input_state = GPIO.input(BUTTON_PIN)
