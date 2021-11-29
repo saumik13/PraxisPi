@@ -58,7 +58,7 @@ def main():
             capture(camera)
 
             try:
-                outputs = predict()
+                outputs = predict(model)
             except ValueError:
                 print(f'Couldn\'t find image file')
                 return
