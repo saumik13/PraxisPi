@@ -13,12 +13,10 @@ EXPORT_MODEL_VERSION = 1
 
 class WasteModel:
     def __init__(self):
-        with open(os.path.join(model_dir, 'signature.json'), 'r') as f:
+        with open('./signature.json', 'r') as f:
             self.signature = json.load(f)
 
-        self.model_file = os.path.join(
-            model_dir, self.signature.get('filename'),
-        )
+        self.model_file = self.signature.get('filename')
 
         self.interpreter = tflite.Interpreter(model_path=self.model_file)
         self.interpreter.allocate_tensors()
