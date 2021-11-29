@@ -6,7 +6,7 @@ from picamera import PiCamera
 from PIL import Image
 from RPi import GPIO
 
-from model import TFLiteModel
+from model import WasteModel
 from settings import IMAGE_PATH, LABELS, LED_ACTIVATION_TIME, PINS, BUTTON_PIN
 
 
@@ -32,7 +32,7 @@ def predict():
         raise ValueError('Path is not a file')
 
     image = Image.open(IMAGE_PATH)
-    model = TFLiteModel(os.getcwd())
+    model = WasteModel()
     model.load()
 
     return model.predict(image)
@@ -60,8 +60,7 @@ def main():
                 print(f'Couldn\'t find image file')
                 return
 
-            predictions = outputs['predictions']
-            max_low_label = max(predictions, key=itemgetter('confidence'))['label']
+            max_low_label = max(outputs, key=itemgetter('confidence'))['label']
             high_label = LABELS[max_low_label]
 
             print(f'Predicted: {high_label}')
