@@ -1,3 +1,7 @@
+#  ----------------------------------------------------------------------------
+#   Copyright (c) PraxisPi Group & Microsoft Corporation. All rights reserved.
+#  ----------------------------------------------------------------------------
+
 import json
 import os
 

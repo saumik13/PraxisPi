@@ -1,3 +1,7 @@
+#  ----------------------------------------------------------------------------
+#   Copyright (c) PraxisPi Group. All rights reserved.
+#  ----------------------------------------------------------------------------
+
 import os
 from operator import itemgetter
 from time import sleep
